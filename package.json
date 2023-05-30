@@ -5,7 +5,19 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "watch": "node --watch src/server.js",
+    "eslint": "eslint . --fix --quiet",
+    "docs": "jsdoc --configure jsdoc.json --verbose"
+  },
+  "imports": {
+    "#src/*": "./src/*"
+  },
+  "jest": {
+    "verbose": true,
+    "transform": {},
+    "testEnvironment": "node",
+    "testTimeout": 30000
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -13,6 +25,8 @@
     "parameter": "^3.7.0"
   },
   "devDependencies": {
+    "eslint": "^8.42.0",
+    "jsdoc": "^4.0.2"
   },
   "author": "mau-io",
   "license": "ISC"
