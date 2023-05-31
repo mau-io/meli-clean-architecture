@@ -1,9 +1,12 @@
-import express from 'express';
+/**
+ * Express Server
+ */
+import ExpressServer from '#src/shared/infrastructure/framework_drivers/express/ExpressServer.js';
 
-const app = express();
+// middlewares 
+const middlewares = [
+];
 
-app.get('/', (req, res) => {
-  res.send('');
-});
-
-export { app };
+// Export the server application without listening
+export const app = new ExpressServer([
+], middlewares);
