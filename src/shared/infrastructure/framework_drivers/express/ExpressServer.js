@@ -3,6 +3,8 @@ import cors from 'cors';
 import compression from 'compression';
 import notFoundMiddleware from '#src/shared/infrastructure/framework_drivers/express/midlewares/notFoundMiddleware.js';
 import shouldCompress from '#src/shared/infrastructure/framework_drivers/express/midlewares/shouldCompress.js';
+import health from '#src/shared/infrastructure/framework_drivers/express/routes/health.js';
+import vitals from '#src/shared/infrastructure/framework_drivers/express/routes/vitals.js';
 
 class ExpressServer {
   constructor(routes, middlewares) {
@@ -20,6 +22,9 @@ class ExpressServer {
       level: 9
     }));
 
+    this.app.get('/vitals', vitals);
+    this.app.get('/health', health);
+    
     // Add each middleware to the application
     middlewares.forEach(middleware => {
       this.app.use(middleware);
