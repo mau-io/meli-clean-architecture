@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app
+        image: app-meli:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3030
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 3030
+    targetPort: 3030
+  selector:
+    app: my-app
