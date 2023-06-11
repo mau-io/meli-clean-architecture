@@ -41,7 +41,9 @@ const cache = new InMemoryCacheStrategy();
 
 let httpClient = new FetchHttpClient();
 httpClient = new LoggingHttpClientDecorator(httpClient, logger);
-httpClient = new RetryHttpClientDecorator(httpClient, logger, httpClientRetries);
+httpClient = new RetryHttpClientDecorator(httpClient, logger, {
+  retries: httpClientRetries
+});
 
 // Initialize your repos here
 let externalResourceDataRepository = new SearchContext.ExternalResourceDataRepository(
