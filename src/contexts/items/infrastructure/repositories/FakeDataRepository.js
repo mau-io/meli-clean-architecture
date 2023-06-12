@@ -5,9 +5,8 @@ import ItemEntity from '#src/shared/domain/entities/ItemEntity.js';
 import PriceEntity from '#src/shared/domain/entities/PriceEntity.js';
 
 /**
- * FakeDataRepository class extends AbstractDataRepository to provide mock data
- * for testing or development purposes. This class creates fake items,
- * categories, and pagination information.
+ * FakeDataRepository class extends AbstractDataRepository. 
+ * It's a repository implementation that generates mock data.
  * @extends AbstractDataRepository
  */
 class FakeDataRepository extends AbstractDataRepository {
@@ -19,12 +18,9 @@ class FakeDataRepository extends AbstractDataRepository {
   }
 
   /**
-   * Generates and returns fake data for categories and items. The amount of
-   * items returned can be adjusted using the limit option.
-   *
-   * @param {string} itemId - The search query.
-   * @returns {Promise<object>} A promise that resolves to an object containing 
-   * fake data for paging, categories and items.
+   * Generates and returns fake item data based on the provided itemId.
+   * @param {string} itemId - The unique identifier for the item for which to generate the data.
+   * @returns {Promise<object>} A promise that resolves to an object containing.
    */
   async read(itemId) {
 

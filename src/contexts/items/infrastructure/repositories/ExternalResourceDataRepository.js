@@ -9,16 +9,16 @@ import HTTP_STATUS_CODES from '#src/shared/infrastructure/constants/httpStatusCo
 import countDecimals from '#src/common/infrastructure/lib/countDecimals.js';
 
 /**
- * ExternalResourceDataRepository class extends AbstractDataRepository to provide mock data
- * for testing or development purposes. This class creates fake items,
- * categories, and pagination information.
+ * ExternalResourceDataRepository class extends AbstractDataRepository.
+ * It's a concrete repository implementation for fetching data from external resources.
  * @extends AbstractDataRepository
  */
 class ExternalResourceDataRepository extends AbstractDataRepository {
   /**
    * @constructor
    * @typedef {import('#src/common/infrastructure/http/AbstractHttpClient').HttpClient} HttpClient
-   * @param {HttpClient} httpClient - A HTTP client.
+   * @param {HttpClient} httpClient - A HTTP client to perform requests to the external resource.
+   * @param {object} config - A configuration object for this repository. 
    */
   constructor(httpClient, config) {
     super();
@@ -27,18 +27,11 @@ class ExternalResourceDataRepository extends AbstractDataRepository {
   }
 
   /**
-   * Generates and returns fake data for categories and items. The amount of
-   * items returned can be adjusted using the limit option.
-   *
-   * @param {string} itemId - The search query.
+   * Retrieves the data for a particular item from the external resource.
+   * @param {string} itemId - The unique identifier for the item.
    * @returns {Promise<object>} A promise that resolves to an object containing 
-   * fake data for paging, categories and items.
    */
   async read(itemId) {
-    /*
-      ttps://api.mercadolibre.com/items/:id
-      https://api.mercadolibre.com/items/:id/description
-    */
 
     const url = `${this.config.url}/items/${itemId}`;
     const urlDescription = `${url}/description`;
@@ -102,6 +95,13 @@ class ExternalResourceDataRepository extends AbstractDataRepository {
     }
   }
 
+  /**
+   * Extracts the name and surname of the author from the attributes of an item.
+   * @private
+   * @param {Array} attributes - The attributes of an item.
+   * @returns {Object} An object with properties 'name' and 'lastname', 
+   * both containing strings or undefined if the author's name wasn't found among the attributes.
+   */
   _getAuthorNameAndSurname(attributes) {
     const authorAttribute = attributes.find(
       attribute => attribute.id === 'AUTHOR'
