@@ -36,7 +36,7 @@ This project uses Node.js and Express.js. To run this project, you will need to 
 - `SERVER_PORT`: The port where the server will listening
 - `MELI_SERVICE_URL`: The URL of the Mercado Libre API service
 - `MELI_SERVICE_TOKEN`: The token for the Mercado Libre API service
-- `MELI_SERVICE_FAKE_TOKEN`: A fake token for the Mercado Libre API service
+- `MELI_SERVICE_FAKE_TOKEN`:  This is a mock token for the Mercado Libre API service. When this token is used, actual requests to the Mercado Libre API will not be made. Instead, mocked data will be returned. 
 - `MELI_SERVICE_TIMEOUT`: The timeout setting for the Mercado Libre API service
 - `MELI_SERVICE_ITEMS_CACHE_TTL`: The time-to-live setting for the Mercado Libre API items cache
 - `MELI_SERVICE_SEARCH_CACHE_TTL`: The time-to-live setting for the Mercado Libre API search cache
@@ -50,8 +50,8 @@ PROJECT_VERSION=0.0.0
 SERVER_HOSTNAME=localhost
 SERVER_PORT=3030
 MELI_SERVICE_URL=https://api.mercadolibre.com
-MELI_SERVICE_TOKEN=e962f81a-4d42-4eb3-86cd-a25e7237c8dc
-MELI_SERVICE_FAKE_TOKEN=55a4639f-55e8-4e14-a6cc-b79977b20a4e
+MELI_SERVICE_TOKEN=xxxxx
+MELI_SERVICE_FAKE_TOKEN=xxxxx
 MELI_SERVICE_TIMEOUT=3500
 MELI_SERVICE_ITEMS_CACHE_TTL=20000
 MELI_SERVICE_SEARCH_CACHE_TTL=5000
@@ -107,92 +107,105 @@ This API provides functionality to interact with the Mercado Libre marketplace. 
 
 ## Endpoints
 
-### Search Items
+#### Search Items
 
-Performs a search for items in a specific Mercado Libre site.
+<details>
+ <summary><code>GET</code> <code><b>/api/v1/search</b></code> <code>(Performs a search for items in a specific Mercado Libre site)</code></summary>
 
-```http
-  GET /api/v1/search
-```
+##### Parameters
 
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `query`   | `string` | **Required**. The search term     |
-| `site`    | `string` | **Required**. The Mercado Libre site for the search. Must be one of: MLA, MLB, MLM |
-| `sort`    | `string` | The sorting order. Can be one of: 'price_asc', 'price_desc' |
-| `limit`   | `number` | The maximum number of results to return. Default is 50 |
-| `offset`  | `number` | The number of results to skip before starting to return results. Default is 0 |
+> | name      | type      | data type | description                                       |
+> |-----------|-----------|-----------|---------------------------------------------------|
+> | `query`   | required  | string    | The search term                                   |
+> | `site`    | required  | string    | The Mercado Libre site for the search.            |
+> | `sort`    | optional  | string    | The sorting order.                                |
+> | `limit`   | optional  | number    | The maximum number of results to return.          |
+> | `offset`  | optional  | number    | The number of results to skip before starting to return results.|
 
-Response:
-```
-{
-  "paging": {
-    "total": Number,
-    "offset": Number,
-    "limit": Number
-  },
-  "categories": [String, ...],
-  "items": [
-    {
-      "id": String,
-      "title": String,
-      "price": {
-        "currency": String,
-        "amount": Number,
-        "decimals": Number
-      },
-      "picture": String,
-      "condition": String,
-      "free_shipping": Boolean
-    },
-    ...
-  ]
-}
-```
+##### Responses
+
+> | http code | content-type               | response                                                            |
+> |-----------|----------------------------|---------------------------------------------------------------------|
+> | `200`     | `application/json`         | 
+> ```
+> {
+>   "paging": {
+>     "total": Number,
+>     "offset": Number,
+>     "limit": Number
+>   },
+>   "categories": [String, ...],
+>   "items": [
+>     {
+>       "id": String,
+>       "title": String,
+>       "price": {
+>         "currency": String,
+>         "amount": Number,
+>         "decimals": Number
+>       },
+>       "picture": String,
+>       "condition": String,
+>       "free_shipping": Boolean
+>     },
+>     ...
+>   ]
+> }
+> ``` |
+
+##### Example cURL
+
+> ```javascript
+>  curl -X GET -H "Content-Type: application/json" -H "x-auth-token: your_token" "http://localhost:3030/api/v1/search?query=iphone&site=MLA"
+> ```
+</details>
 
 #### Get Item
 
-Fetches details of a specific item.
+<details>
+ <summary><code>GET</code> <code><b>/api/v1/items/:id</b></code> <code>(Fetches details of a specific item)</code></summary>
 
-```http
-  GET /api/v1/items/:id
-```
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`   | `string` | **Required**. The Mercado Libre item Id.   |
+##### Parameters
 
+> | name | type     | data type | description                     |
+> |------|----------|-----------|---------------------------------|
+> | `id` | required | string    | The Mercado Libre item Id.      |
 
-Response:
-```
-{
-  "author": {
-    "name": String,
-    "lastname": String
-  },
-  "item": {
-    "id": String,
-    "title": String,
-    "price": {
-      "currency": String,
-      "amount": Number,
-      "decimals": Number
-    },
-    "picture": String,
-    "condition": String,
-    "free_shipping": Boolean,
-    "sold_quantity": Number,
-    "description": String
-  }
-}
-```
+##### Responses
 
-All requests must include an 'x-auth-token' header with one of the following values:
+> | http code | content-type               | response                                                            |
+> |-----------|----------------------------|---------------------------------------------------------------------|
+> | `200`     | `application/json`         | 
+> ```
+> {
+>   "author": {
+>     "name": String,
+>     "lastname": String
+>   },
+>   "item": {
+>     "id": String,
+>     "title": String,
+>     "price": {
+>       "currency": String,
+>       "amount": Number,
+>       "decimals": Number
+>     },
+>     "picture": String,
+>     "condition": String,
+>     "free_shipping": Boolean,
+>     "sold_quantity": Number,
+>     "description": String
+>   }
+> }
+> ``` |
 
-| Parameter      | Type     | Description                       |
-| :--------      | :------- | :-------------------------------- |
-| `x-auth-token` | `string` | Your Authentication token         |
+##### Example cURL
 
-**Note:** If the 'x-auth-token' header's value is `55a4639f-55e8-4e14-a6cc-b79977b20a4e`, mocked data will be returned.
+> ```javascript
+>  curl -X GET -H "Content-Type: application/json" -H "x-auth-token: your_token" "http://localhost:3030/api/v1/items/MLA816019440"
+> ```
+
+</details>
 
 ## Sequence diagram
 ```
