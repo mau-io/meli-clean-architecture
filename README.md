@@ -102,7 +102,14 @@ This script is used to generate documentation for the project using JSDoc.
   
 ## API Reference
 
-#### Search Items
+## Overview
+This API provides functionality to interact with the Mercado Libre marketplace. With this API, you can search for items and get item details. It provides endpoints to perform these operations.
+
+## Endpoints
+
+### Search Items
+
+Performs a search for items in a specific Mercado Libre site.
 
 ```http
   GET /api/v1/search
@@ -145,12 +152,14 @@ Response:
 
 #### Get Item
 
+Fetches details of a specific item.
+
 ```http
   GET /api/v1/items/:id
 ```
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`   | `string` | **Required**. The MeLi item Id    |
+| `id`   | `string` | **Required**. The Mercado Libre item Id.   |
 
 
 Response:
