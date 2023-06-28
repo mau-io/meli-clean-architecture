@@ -18,6 +18,9 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3030
+        envFrom: # ENV
+        - configMapRef: 
+            name: my-config-map
 ---
 apiVersion: v1
 kind: Service

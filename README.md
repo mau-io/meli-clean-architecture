@@ -284,20 +284,31 @@ Once this command is executed, your application will be running in a Docker cont
 
 Once you have your Docker image, you can deploy your application to Kubernetes.
 
-You can run the manifest with the `kubectl` command:
+Before applying the deployment, you need to create a ConfigMap from your .env file. You can do this using the following commands:
+
+```bash
+kubectl create configmap my-config-map --from-env-file=.env
+```
+Confirm that the ConfigMap has been successfully created:
+
+```bash
+kubectl get configmaps my-config-map -o yaml
+```
+
+The Kubernetes manifest can then be applied with:
 
 ```bash
 kubectl apply -f deployment.yaml
 ```
 
-You can see the running Pods with:
+To monitor the running Pods, the following commands can be used:
 ```bash
 kubectl get pods
 kubectl get deployments
 kubectl get services
 ```
 
-You can delete the Pods with:
+In case the Pods need to be deleted, use:
 ```bash
 kubectl delete service my-app
 kubectl delete deployment my-app
