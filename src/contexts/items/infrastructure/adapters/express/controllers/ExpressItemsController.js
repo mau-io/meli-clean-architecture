@@ -8,7 +8,7 @@ class ExpressItemsController {
     this.logger = logger;
   }
 
-  async handleGetItem(req, res) {
+  async handleGetItem(req, res, next) {
     try {
       
       const params = {
@@ -23,28 +23,7 @@ class ExpressItemsController {
         .json(response);
 
     } catch(error) {
-      if (error instanceof ApplicationError) {
-        this.logger.warn({
-          title: '[ExpressItemsController] WARM',
-          data: error
-        });
-        res
-          .status(error.status)
-          .json(error);
-      } else {
-        PrettyError.format(error);
-        this.logger.error({
-          title: '[ExpressItemsController] ERROR',
-          data: error
-        });
-        res
-          .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
-          .json({
-            status: HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR,
-            message: error.message,
-            errors: [],
-          });
-      }
+      next(error);
     }
   }
 }

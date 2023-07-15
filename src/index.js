@@ -1,7 +1,10 @@
 /**
  * Configuration
  */
-import {MELI_SERVICE, PROJECT} from '#src/config/index.js';
+import {
+  MELI_SERVICE,
+  PROJECT
+} from '#src/config/index.js';
 
 /**
  * Common
@@ -24,7 +27,9 @@ import ExpressServer from '#src/shared/infrastructure/framework_drivers/express/
 /**
  * Express Middlewares
  */
+import notFoundMiddleware from '#src/shared/infrastructure/framework_drivers/express/midlewares/notFoundMiddleware.js';
 import loggingMiddleware from '#src/shared/infrastructure/framework_drivers/express/midlewares/loggingMiddleware.js';
+import errorHandlerMiddleware from '#src/shared/infrastructure/framework_drivers/express/midlewares/errorHandlerMiddleware.js';
 import validateAuthToken from '#src/shared/infrastructure/framework_drivers/express/midlewares/validateAuthTokenMiddleware.js';
 import extendedTokenValidation from '#src/shared/infrastructure/framework_drivers/express/midlewares/extendedValidateAuthTokenMiddleware.js';
 
@@ -74,7 +79,7 @@ itemsExternalResourceDataRepository = new CachingDataRepositoryDecorator(
 // Initialize your use cases here
 const searchItemsUseCase = new SearchContext.SearchItemsUseCase({
   fakeDataRepository: new SearchContext.FakeDataRepository(),
-  externalResourceDataRepository 
+  externalResourceDataRepository
 });
 
 const getItemsUseCase = new ItemsContext.GetItemsUseCase({
@@ -106,12 +111,19 @@ const middlewares = [
   new loggingMiddleware()
     .setLogger(logger)
     .getMiddleware,
-  validateAuthToken, 
+  validateAuthToken,
   extendedTokenValidation
+];
+
+const finalMiddlewares = [
+  new errorHandlerMiddleware()
+    .setLogger(logger)
+    .getMiddleware,
+  notFoundMiddleware
 ];
 
 // Export the server application without listening
 export const app = new ExpressServer([
   searchRoutes,
   itemsRoutes
-], middlewares);
+], middlewares, finalMiddlewares);
