@@ -12,9 +12,11 @@ import {
 import CachingDataRepositoryDecorator from '#src/shared/infrastructure/repositories/decorator/CachingDataRepositoryDecorator.js';
 import ParameterValidator from '#src/shared/infrastructure/utils/ParameterValidator.js';
 import FetchHttpClient from '#src/common/infrastructure/http/FetchHttpClient.js';
+import MonitoredFetchHttpClient from '#src/common/infrastructure/http/MonitoredFetchHttpClient.js';
 
 import LoggingHttpClientDecorator from '#src/common/infrastructure/http/decorator/LoggingHttpClientDecorator.js';
 import RetryHttpClientDecorator from '#src/common/infrastructure/http/decorator/RetryHttpClientDecorator.js';
+
 
 import InMemoryCacheStrategy from '#src/common/infrastructure/cache/InMemoryCacheStrategy.js';
 import ConsoleLoggerStrategy from '#src/common/infrastructure/logger/ConsoleLoggerStrategy.js';
@@ -45,6 +47,7 @@ const logger = new ConsoleLoggerStrategy(PROJECT);
 const cache = new InMemoryCacheStrategy();
 
 let httpClient = new FetchHttpClient();
+//let httpClient = new MonitoredFetchHttpClient();
 httpClient = new LoggingHttpClientDecorator(httpClient, logger);
 httpClient = new RetryHttpClientDecorator(httpClient, logger, {
   retries: httpClientRetries
