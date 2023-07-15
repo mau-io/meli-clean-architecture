@@ -1,39 +1,55 @@
+/**
+ * Class representing a client for making HTTP requests in parallel.
+ */
 class ParallelHttpClient {
   constructor() {
     this.httpClient = null;
   }
 
+  /**
+   * Makes parallel requests to an array of URLs and returns the data from all resolved responses.
+   *
+   * @param {string[]} [urls=[]] - The URLs to send requests to.
+   * @returns {Promise} Promise that resolves to an array of data from all responses.
+   */
   async makeParallelRequestsAll(urls = []) {
-
     const promises = urls.map(url => this.httpClient.get(url));
   
-    // Usa Promise.all() para esperar a que todas las promesas se resuelvan
+    // Use Promise.all() to wait for all promises to resolve
     const responses = await Promise.all(promises);
   
-    // En este punto, todas las solicitudes se han resuelto
-    // 'responses' es un array de las respuestas de cada solicitud
+    // At this point, all requests have resolved
+    // 'responses' is an array of the responses from each request
     responses.forEach(response => {
-      console.log(response.data);  // Accede a la propiedad 'data' de cada respuesta
+      console.log(response.data);  // Access the 'data' property of each response
     });
 
-    const results = responses.
+    // Assuming you meant to return the responses here
+    return responses;
   }
 
+  /**
+   * Makes parallel requests to an array of URLs and returns an object containing arrays of 
+   * fulfilled and rejected results.
+   *
+   * @param {string[]} [urls=[]] - The URLs to send requests to.
+   * @returns {Promise} Promise that resolves to an object containing 'fulfilledResults' and 'rejectedResults'.
+   */
   async makeParallelRequestsAllSettled(urls = []) {
     const promises = urls.map(url => this.httpClient.get(url));
 
-    // Usa Promise.allSettled() en lugar de Promise.all()
+    // Use Promise.allSettled() instead of Promise.all()
     const results = await Promise.allSettled(promises);
 
     const fulfilledResults = [];
     const rejectedResults = [];
 
-    // 'results' es un array de objetos que describen el resultado de cada promesa
+    // 'results' is an array of objects describing the result of each promise
     results.forEach(result => {
       if (result.status === 'fulfilled') {
-        fulfilledResults.push(result.value.data);  // Accede a la propiedad 'data' de la respuesta
+        fulfilledResults.push(result.value.data);  // Access the 'data' property of the response
       } else if (result.status === 'rejected') {
-        rejectedResults.push(result.reason);  // Accede al motivo de rechazo
+        rejectedResults.push(result.reason);  // Access the rejection reason
       }
     });
 
